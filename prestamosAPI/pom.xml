@@ -38,13 +38,36 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+		    <groupId>net.sourceforge.tess4j</groupId>
+		    <artifactId>tess4j</artifactId>
+		    <version>4.2.1</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>edu.stanford.nlp</groupId>
+		    <artifactId>stanford-corenlp</artifactId>
+		    <version>3.9.1</version>
+		    <classifier>models</classifier>
+		</dependency>
+
+		<dependency>
+		    <groupId>edu.stanford.nlp</groupId>
+		    <artifactId>stanford-corenlp</artifactId>
+  			<version>3.9.1</version>
+		</dependency>
+		
+		
 	</dependencies>
+
 
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				
 			</plugin>
 		</plugins>
 	</build>
