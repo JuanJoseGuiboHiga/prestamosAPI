@@ -59,6 +59,14 @@
 		</dependency>
 		
 		
+<!-- https://mvnrepository.com/artifact/ai.api/libai -->
+<dependency>
+    <groupId>ai.api</groupId>
+    <artifactId>libai</artifactId>
+    <version>1.6.12</version>
+</dependency>
+
+		
 	</dependencies>
 
 
@@ -69,6 +77,22 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				
 			</plugin>
+			<plugin>
+			      <groupId>com.heroku.sdk</groupId>
+			      <artifactId>heroku-maven-plugin</artifactId>
+			      <version>2.0.3</version>
+			      <configuration>
+			          <appName>callicoder-heroku-maven-demo</appName>
+			          <includeTarget>false</includeTarget>
+			          <includes>
+			              <include>${project.build.directory}/${project.build.finalName}.jar</include>
+			          </includes>
+			          <jdkVersion>${java.version}</jdkVersion>
+			          <processTypes>
+			              <web>java $JAVA_OPTS -jar ${project.build.directory}/${project.build.finalName}.jar</web>
+			          </processTypes>
+			      </configuration>
+			  </plugin>
 		</plugins>
 	</build>
 

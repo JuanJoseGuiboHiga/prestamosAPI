@@ -4,10 +4,15 @@ import java.io.File;
 import java.util.ArrayList;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ai.api.AIConfiguration;
+import ai.api.AIDataService;
+import ai.api.model.AIRequest;
+import ai.api.model.AIResponse;
 import edu.stanford.nlp.ling.Word;
 import edu.stanford.nlp.simple.Document;
 import edu.stanford.nlp.simple.Sentence;
@@ -16,6 +21,8 @@ import net.sourceforge.tess4j.TesseractException;
 @Controller
 public class Greeting {
 
+	AIConfiguration configuration = new AIConfiguration("60d5fd9490c14a1a9f31fbf13814dbda");
+	AIDataService dataService = new AIDataService(configuration);
 	@RequestMapping(path = "/country", method = RequestMethod.GET)
 	public @ResponseBody ArrayList<Country> getCountry() {
 	   Country country1 =  new Country("Peru", "Gran comida");
@@ -48,29 +55,24 @@ public class Greeting {
 		}
 		return text;
 	}
-	
-	
-	@RequestMapping(path = "/nlp", method = RequestMethod.GET)
-	public @ResponseBody String getNLP() {
-	    try {
-	    	String text = null;
-	       // Document doc = new Document("$1000 is in the sky");
-	        Sentence sentence = new Sentence("Hola, quisiera pedir un préstamo ");
-	        //for (Sentence sent : doc.sentences()) {
-	        	//text = sent.nerTag(0);
-	        //}
-	        for(String word: sentence.words())
-	        {
-	        	if(word.contains("Hola"))
-	        	{
-	        		text = "Hola, en que podemos ayudarte?";
-	        		break;
-	        	}
-	        }
-	        return text;
+		
+	@RequestMapping(path = "/nlp/{conversacion}", method = RequestMethod.GET)
+		public @ResponseBody  ArrayList<RespuestaChatbot> getNLP(@PathVariable String conversacion) {
+		  ArrayList<RespuestaChatbot> respuestas = new ArrayList<>();
+		try {
+	    	  AIRequest request = new AIRequest(conversacion);
+	          AIResponse response = dataService.request(request);
+	          RespuestaChatbot respuestaChat1 = null;
+	          if (response.getStatus().getCode() == 200) {
+	        	  respuestaChat1 = new RespuestaChatbot(response.getResult().getFulfillment().getSpeech());
+	            } 
+	   	   respuestas.add(respuestaChat1);
+		 
 		} catch (Exception e) {
-			return e.getMessage();
-		}
+			
+		} 
+		return respuestas;
+
 	}
 
 	
