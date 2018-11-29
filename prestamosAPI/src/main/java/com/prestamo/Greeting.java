@@ -18,6 +18,12 @@ import edu.stanford.nlp.simple.Document;
 import edu.stanford.nlp.simple.Sentence;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
 @Controller
 public class Greeting {
 
@@ -74,8 +80,42 @@ public class Greeting {
 		return respuestas;
 
 	}
-
 	
+	@RequestMapping(path = "/sql", method = RequestMethod.GET)
+	public @ResponseBody  void ejecutarQuery() {
+	
+	try {
+		insertarRegistro();
+	} catch (Exception e) {
+		
+	} 
 
+}
+	  public  void insertarRegistro() {
+		  
+		  String connectionUrl ="jdbc:sqlserver://;database=Coop;integratedSecurity=true;";
 
+	        String insertSql = "INSERT INTO ValoracionConversacion (Usuario, Calificacion, Comentario, FechAcalificacion)"
+	                + "VALUES ('US002', '6', 'Necesita ser mas amable', '2016-01-01');";
+
+	        ResultSet resultSet = null;
+
+	        try (Connection connection = DriverManager.getConnection(connectionUrl);
+	                PreparedStatement prepsInsertProduct = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);) {
+
+	            prepsInsertProduct.execute();
+	            // Retrieve the generated key from the insert.
+	            resultSet = prepsInsertProduct.getGeneratedKeys();
+
+	            // Print the ID of the inserted row.
+	            while (resultSet.next()) {
+	                System.out.println("Generated: " + resultSet.getString(1));
+	            }
+	        }
+	        // Handle any errors that may have occurred.
+	        catch (Exception e) {
+	            e.printStackTrace();
+	        }
+
+	  }
 }
