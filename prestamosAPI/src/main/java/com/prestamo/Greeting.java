@@ -1,7 +1,9 @@
 package com.prestamo;
 
 import java.io.File;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +25,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.sql.PreparedStatement;
 @Controller
 public class Greeting {
@@ -81,22 +84,31 @@ public class Greeting {
 
 	}
 	
-	@RequestMapping(path = "/sql", method = RequestMethod.GET)
-	public @ResponseBody  void ejecutarQuery() {
+	@RequestMapping(path = "/sql/{idUsuario}/{calificacion}/{comentario}", method = RequestMethod.GET)
+	public @ResponseBody  ArrayList<Country> ejecutarQuery(@PathVariable String idUsuario,@PathVariable String calificacion,@PathVariable String comentario) {
 	
 	try {
-		insertarRegistro();
+		 comentario = URLDecoder.decode(comentario,"UTF-8");
+		insertarRegistro(idUsuario,calificacion,comentario);
+		
 	} catch (Exception e) {
 		
-	} 
+	}
+	  Country country1 =  new Country("Peru", "Gran comida");
+	   Country country2 =  new Country("Alemania", "aa");
+	   ArrayList<Country> countries = new ArrayList<>();
+	   countries.add(country1);
+	   countries.add(country2);
+	   return countries;
 
 }
-	  public  void insertarRegistro() {
+	  public  void insertarRegistro(String isUsuario, String calificacion, String comentario) {
 		  
 		  String connectionUrl ="jdbc:sqlserver://;database=Coop;integratedSecurity=true;";
-
-	        String insertSql = "INSERT INTO ValoracionConversacion (Usuario, Calificacion, Comentario, FechAcalificacion)"
-	                + "VALUES ('US002', '6', 'Necesita ser mas amable', '2016-01-01');";
+		  String date = new SimpleDateFormat("yyyymmdd").format(Calendar.getInstance().getTime()).toString();
+		  System.out.println(date);
+	        String insertSql = "INSERT INTO ValoracionConversacion (Usuario, Calificacion, Comentario, FechaCalificacion)"
+	                + "VALUES ('"+isUsuario+"', '"+calificacion+"', '"+comentario+"', '"+date+"');";
 
 	        ResultSet resultSet = null;
 
