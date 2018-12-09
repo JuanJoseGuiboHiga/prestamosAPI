@@ -78,7 +78,7 @@ public class Greeting {
 	}
 		
 	@RequestMapping(path = "/nlp/{conversacion}", method = RequestMethod.GET)
-		public @ResponseBody  String getNLP(@PathVariable String conversacion) {
+		public @ResponseBody  RespuestaChatbot getNLP(@PathVariable String conversacion) {
 	      RespuestaChatbot respuestaChat1 = null;
         	AIResponse response;
 			try {
@@ -97,7 +97,7 @@ public class Greeting {
 				e.printStackTrace();
 			}
 			 System.out.println(respuestaChat1.getRespuesta());  
-		return respuestaChat1.getRespuesta();
+		return respuestaChat1;
 
 	}
 	
@@ -126,6 +126,7 @@ public class Greeting {
 	public @ResponseBody  ArrayList<Country> registrarConversacionNoManejada(@PathVariable String idUsuario,@PathVariable String comentario) {
 	
 	try {
+		System.out.println(comentario);
 		String comentario2 = URLDecoder.decode(comentario,"UTF-8");
 		System.out.println(comentario2);
 		 insertarConversacion(idUsuario,comentario2);
@@ -164,6 +165,7 @@ public class Greeting {
 
     String estado = obtenerEstadoSolicitud(numero);
     SolicitudPrestamo sol = new SolicitudPrestamo(estado);
+    System.out.println(sol.getEstado());
     return sol;
 
 }
