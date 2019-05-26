@@ -58,6 +58,7 @@
   			<version>3.9.1</version>
 		</dependency>
 		
+
 		
 <!-- https://mvnrepository.com/artifact/ai.api/libai -->
 <dependency>
@@ -65,7 +66,6 @@
     <artifactId>libai</artifactId>
     <version>1.6.12</version>
 </dependency>
-
 		
 	</dependencies>
 

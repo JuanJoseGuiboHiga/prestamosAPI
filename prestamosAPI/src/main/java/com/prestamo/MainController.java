@@ -1,12 +1,18 @@
 package com.prestamo;
 
 import java.awt.List;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -15,6 +21,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Scanner;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,9 +47,9 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.sql.PreparedStatement;
 @Controller
-public class Greeting {
+public class MainController {
 
-	AIConfiguration configuration = new AIConfiguration("60d5fd9490c14a1a9f31fbf13814dbda");
+	AIConfiguration configuration = new AIConfiguration("");
 	AIDataService dataService = new AIDataService(configuration);
 	@RequestMapping(path = "/country", method = RequestMethod.GET)
 	public @ResponseBody ArrayList<Country> getCountry() {
@@ -55,26 +62,58 @@ public class Greeting {
 	}
 	
 	@RequestMapping(path = "/ocr", method = RequestMethod.GET)
-	public @ResponseBody String getOCR() {
-		 Tesseract tesseract = new Tesseract();
-		 String text  = null;
-		 String estadosFinancieros = null;
+	public @ResponseBody void getOCR() {
+
 		 try {
-			tesseract.setDatapath("D://Tesis/prestamosAPI/prestamosAPI/testdata");
-			text = tesseract.doOCR(new File("D://Tesis/prestamosAPI/prestamosAPI/img/test.png"));
-//	        Document doc = new Document(text);
-//	        int i=0;
-//	        for (Sentence sent : doc.sentences()) {
-//	           if(sent.nerTag(i).equals("MONEY"))
-//	           {
-//	        	   estadosFinancieros = sent.word(i);
-//	           }
-//	        }
-	        return text;
-		 } catch (TesseractException e) {		
+			 final String TARGET_URL =
+		                "https://vision.googleapis.com/v1/images:annotate?key=";
+		 URL serverUrl = new URL(TARGET_URL);
+		 URLConnection urlConnection = serverUrl.openConnection();
+		 urlConnection.setDoOutput(true);
+		 HttpURLConnection httpConnection = (HttpURLConnection)urlConnection;
+		 httpConnection.setRequestProperty("Content-Type", "application/json");
+		 BufferedWriter httpRequestBodyWriter = new BufferedWriter(new
+                 OutputStreamWriter(httpConnection.getOutputStream()));
+			httpRequestBodyWriter.write
+			 ("{\"requests\":  [{ \"features\":  [ {\"type\": \"TEXT_DETECTION\""
+			 +"}], \"image\": {\"source\": { \"imageUri\":"
+			 +" \"https://d33v4339jhl8k0.cloudfront.net/docs/assets/5a6a22fb0428632faf622ddb/images/5b05911d2c7d3a2f9011d3b2/file-zGAlGIoLFL.png\"}}}]}");
+			httpRequestBodyWriter.close();
+			String response = httpConnection.getResponseMessage();
+			if (httpConnection.getInputStream() == null) {
+			    System.out.println("No stream");
+			    return;
+			}
+
+			Scanner httpResponseScanner = new Scanner (httpConnection.getInputStream());
+			String resp = "";
+			while (httpResponseScanner.hasNext()) {
+			    String line = httpResponseScanner.nextLine();
+			    resp += line;
+			    System.out.println(line);  //  alternatively, print the line of response
+			}
+			httpResponseScanner.close();
+	
+		 } catch (Exception e) {		
 			e.printStackTrace();
 		}
-		return text;
+		
+	}
+	
+	@RequestMapping(path = "/arbolDecision", method = RequestMethod.GET)
+	public @ResponseBody void getPy() {
+
+		 try {
+			 Process p = Runtime.getRuntime().exec("python C://Users/JuanJosé/Desktop/python/clasificador.py > nuevo.txt");
+			 BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			 String s = null;
+			 while ((s =  in.readLine()) != null) {
+				    System.out.println(s);
+				}
+		 } catch (Exception e) {		
+			e.printStackTrace();
+		}
+		
 	}
 		
 	@RequestMapping(path = "/nlp/{conversacion}", method = RequestMethod.GET)
@@ -122,7 +161,38 @@ public class Greeting {
 }
 	
 	
+/*	@RequestMapping(path = "/sql/{idUsuario}/{calificacion}/{comentario}", method = RequestMethod.GET)
+	public @ResponseBody  String ejecutarQuery(@PathVariable String idUsuario,@PathVariable String calificacion,@PathVariable String comentario) {
+	
+	try {
+		 comentario = URLDecoder.decode(comentario,"UTF-8");
+		insertarRegistro(idUsuario,calificacion,comentario);
+		System.out.println(comentario);
+		
+	} catch (Exception e) {
+		
+	}
+		return "ok";
+
+   }*/
+	
+	
 	@RequestMapping(path = "/conversacion/{idUsuario}/{comentario}", method = RequestMethod.GET)
+	public @ResponseBody  String registrarConversacionNoManejada(@PathVariable String idUsuario,@PathVariable String comentario) {
+	
+	try {
+		System.out.println(comentario);
+		String comentario2 = URLDecoder.decode(comentario,"UTF-8");
+		System.out.println(comentario2);
+		 insertarConversacion(idUsuario,comentario2);
+		
+	} catch (Exception e) {
+		
+	}
+		return "ok";
+	}
+	
+/*	@RequestMapping(path = "/conversacion/{idUsuario}/{comentario}", method = RequestMethod.GET)
 	public @ResponseBody  ArrayList<Country> registrarConversacionNoManejada(@PathVariable String idUsuario,@PathVariable String comentario) {
 	
 	try {
@@ -141,9 +211,9 @@ public class Greeting {
 	   countries.add(country2);
 	   return countries;
 
-	}
+	}*/
 	
-	@RequestMapping(path = "/file", method = RequestMethod.GET)
+/*	@RequestMapping(path = "/file", method = RequestMethod.GET)
 	public @ResponseBody  ArrayList<Country> registrarConversacionNoManejada() {
 	
 	try {
@@ -158,7 +228,7 @@ public class Greeting {
 	   countries.add(country2);
 	   return countries;
 
-	}
+	}*/
 	
 	@RequestMapping(path = "/estadoSolicitud/{numero}", method = RequestMethod.GET)
 	public @ResponseBody  SolicitudPrestamo getEstado(@PathVariable String numero) {
@@ -209,6 +279,128 @@ public class Greeting {
 
 	  }
 	  
+	  public  void insertarSolicitudPrestamo(String idSolicitante, String motivo, double monto, double activo,
+			  double pasivo, double patrimonio, double costo, double ventaTotal, double gastosAdm, double gastosVent,double margenUti) {
+		  
+		  String connectionUrl ="jdbc:sqlserver://JUANJO\\sqlpoc;database=Coop;integratedSecurity=true;";
+	        String insertSql = "INSERT INTO SolicitudPrestamo (IdSolicitante, Motivo, Monto, Estado, Activo, Pasivo, Patrimonio, Costo, VentaTotal,"
+	        		+ "GastosAdministrativos,GastosVentas,MargenUtilidad)"
+	                + "VALUES ('"+idSolicitante+"','"+motivo+"', '"+monto+"'"+"Creada"+"','"+activo+"', '"+pasivo+"', '"+patrimonio+"'"+costo+"','"+ventaTotal+"', '"+gastosAdm+"','"+gastosVent+"', '"+margenUti+"');";
+
+	        ResultSet resultSet = null;
+
+	        try (Connection connection = DriverManager.getConnection(connectionUrl);
+	                PreparedStatement prepsInsertProduct = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);) {
+
+	            prepsInsertProduct.execute();
+	            // Retrieve the generated key from the insert.
+	            resultSet = prepsInsertProduct.getGeneratedKeys();
+
+	            // Print the ID of the inserted row.
+	            while (resultSet.next()) {
+	                System.out.println("Generated: " + resultSet.getString(1));
+	            }
+	        }
+	        // Handle any errors that may have occurred.
+	        catch (Exception e) {
+	            e.printStackTrace();
+	        }
+
+	  }
+	  
+ public  void insertarSolicitante(String nombre, String tipoDoc, String numDoc, String correo, String telefono) {
+		  
+		  String connectionUrl ="jdbc:sqlserver://JUANJO\\sqlpoc;database=Coop;integratedSecurity=true;";
+	        String insertSql = "INSERT INTO Solicitante (Nombre, TipoDocumento, NumeroDocumento, Correo, Telefono)"
+	                + "VALUES ('"+nombre+"', '"+tipoDoc+"', '"+numDoc+"', '"+correo+"', '"+telefono+"');";
+
+	        ResultSet resultSet = null;
+
+	        try (Connection connection = DriverManager.getConnection(connectionUrl);
+	                PreparedStatement prepsInsertProduct = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);) {
+
+	            prepsInsertProduct.execute();
+	            // Retrieve the generated key from the insert.
+	            resultSet = prepsInsertProduct.getGeneratedKeys();
+
+	            // Print the ID of the inserted row.
+	            while (resultSet.next()) {
+	                System.out.println("Generated: " + resultSet.getString(1));
+	            }
+	        }
+	        // Handle any errors that may have occurred.
+	        catch (Exception e) {
+	            e.printStackTrace();
+	        }
+
+	  }
+ 
+ public  void insertarPrestamo(String idPropuesta, String idCliente, String monto, String motivo, String estado) {
+	  
+	  String connectionUrl ="jdbc:sqlserver://JUANJO\\sqlpoc;database=Coop;integratedSecurity=true;";
+       String insertSql = "INSERT INTO Prestamo (IdPropuesta, IdCliente, Monto, Motivo, Estado)"
+               + "VALUES ('"+idPropuesta+"', '"+idCliente+"', '"+monto+"', '"+motivo+"', '"+estado+"');";
+
+       ResultSet resultSet = null;
+
+       try (Connection connection = DriverManager.getConnection(connectionUrl);
+               PreparedStatement prepsInsertProduct = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);) {
+
+           prepsInsertProduct.execute();
+           // Retrieve the generated key from the insert.
+           resultSet = prepsInsertProduct.getGeneratedKeys();
+
+           // Print the ID of the inserted row.
+           while (resultSet.next()) {
+               System.out.println("Generated: " + resultSet.getString(1));
+           }
+       }
+       // Handle any errors that may have occurred.
+       catch (Exception e) {
+           e.printStackTrace();
+       }
+
+ }
+ 
+ public  void generarRatiosFinancieros(double activo, double pasivo, double patrimonio, double costo, double gastosAdm, double ventaTotal, double gastosVenta, double gastosFinancieros, double margenUtilidad) {
+	 double ratio1, ratio2, ratio3, ratio4, ratio5, ratio6, ratio7;
+	 ratio1=activo/pasivo;
+	 ratio2=pasivo/patrimonio;
+	 ratio3=costo/ventaTotal;
+	 ratio4=gastosAdm/ventaTotal;
+	 ratio5=gastosVenta/ventaTotal;
+	 ratio6=gastosFinancieros/ventaTotal;
+	 ratio7=margenUtilidad/ventaTotal;
+ }
+ 
+ 
+ public  void cambiarEstadoSolicitud(String idSolicitud, String estado) {
+	  
+	  String connectionUrl ="jdbc:sqlserver://JUANJO\\sqlpoc;database=Coop;integratedSecurity=true;";
+       String insertSql = "UPDATE SolicitudPrestamo"
+               + "SET  Estado='"+estado+"where IdSolicitud= "+idSolicitud+"');";
+
+       ResultSet resultSet = null;
+
+       try (Connection connection = DriverManager.getConnection(connectionUrl);
+               PreparedStatement prepsInsertProduct = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);) {
+
+           prepsInsertProduct.execute();
+           // Retrieve the generated key from the insert.
+           resultSet = prepsInsertProduct.getGeneratedKeys();
+
+           // Print the ID of the inserted row.
+           while (resultSet.next()) {
+               System.out.println("Generated: " + resultSet.getString(1));
+           }
+       }
+       // Handle any errors that may have occurred.
+       catch (Exception e) {
+           e.printStackTrace();
+       }
+
+ }
+ 
   public  void insertarRegistro(String isUsuario, String calificacion, String comentario) {
 		  
 		  String connectionUrl ="jdbc:sqlserver://JUANJO\\sqlpoc;database=Coop;integratedSecurity=true;";
