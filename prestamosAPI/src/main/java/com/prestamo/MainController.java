@@ -1,4 +1,4 @@
-package com.prestamo;
+﻿package com.prestamo;
 
 import java.awt.List;
 import java.io.BufferedReader;
@@ -51,22 +51,12 @@ public class MainController {
 
 	AIConfiguration configuration = new AIConfiguration("");
 	AIDataService dataService = new AIDataService(configuration);
-	@RequestMapping(path = "/country", method = RequestMethod.GET)
-	public @ResponseBody ArrayList<Country> getCountry() {
-	   Country country1 =  new Country("Peru", "Gran comida");
-	   Country country2 =  new Country("Alemania", "aa");
-	   ArrayList<Country> countries = new ArrayList<>();
-	   countries.add(country1);
-	   countries.add(country2);
-	   return countries;
-	}
-	
 	@RequestMapping(path = "/ocr", method = RequestMethod.GET)
 	public @ResponseBody void getOCR() {
 
 		 try {
 			 final String TARGET_URL =
-		                "https://vision.googleapis.com/v1/images:annotate?key=";
+		                "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyA5_-d6WUh-scXmS3XjQWRr84iaHKqBlmE";
 		 URL serverUrl = new URL(TARGET_URL);
 		 URLConnection urlConnection = serverUrl.openConnection();
 		 urlConnection.setDoOutput(true);
@@ -117,138 +107,66 @@ public class MainController {
 	}
 		
 	@RequestMapping(path = "/nlp/{conversacion}", method = RequestMethod.GET)
-		public @ResponseBody  RespuestaChatbot getNLP(@PathVariable String conversacion) {
-	      RespuestaChatbot respuestaChat1 = null;
+		public @ResponseBody  RespuestaChatbot getRespuestaChatbot(@PathVariable String conversacion) {
+	      RespuestaChatbot respuestaChat = null;
         	AIResponse response;
 			try {
-				conversacion = URLDecoder.decode(conversacion,"UTF-8");
+				  conversacion = URLDecoder.decode(conversacion,"UTF-8");
 				  AIRequest request = new AIRequest(conversacion);
 				  response = dataService.request(request);
 		          if (response.getStatus().getCode() == 200) {
-		        	  respuestaChat1 = new RespuestaChatbot(response.getResult().getFulfillment().getSpeech());
-		          
+		        	  respuestaChat = new RespuestaChatbot(response.getResult().getFulfillment()
+		        			  .getSpeech());
 		          } 
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (AIServiceException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			 System.out.println(respuestaChat1.getRespuesta());  
-		return respuestaChat1;
+		    return respuestaChat;
 
 	}
 	
 	@RequestMapping(path = "/sql/{idUsuario}/{calificacion}/{comentario}", method = RequestMethod.GET)
-	public @ResponseBody  ArrayList<Country> ejecutarQuery(@PathVariable String idUsuario,@PathVariable String calificacion,@PathVariable String comentario) {
+	public @ResponseBody  String registrarCalificacion(@PathVariable String idUsuario
+			,@PathVariable String calificacion,@PathVariable String comentario) {
+		try {
+			 comentario = URLDecoder.decode(comentario,"UTF-8");
+			 insertarRegistro(idUsuario,calificacion,comentario);
+		} catch (Exception e) {
+			return e.toString();
+		}
+	    return "La calificacion se registro correctamente";
+    }
 	
-	try {
-		 comentario = URLDecoder.decode(comentario,"UTF-8");
-		insertarRegistro(idUsuario,calificacion,comentario);
-		System.out.println(comentario);
-		
-	} catch (Exception e) {
-		
-	}
-	  Country country1 =  new Country("Peru", "Gran comida");
-	   Country country2 =  new Country("Alemania", "aa");
-	   ArrayList<Country> countries = new ArrayList<>();
-	   countries.add(country1);
-	   countries.add(country2);
-	   return countries;
 
-}
-	
-	
-/*	@RequestMapping(path = "/sql/{idUsuario}/{calificacion}/{comentario}", method = RequestMethod.GET)
-	public @ResponseBody  String ejecutarQuery(@PathVariable String idUsuario,@PathVariable String calificacion,@PathVariable String comentario) {
-	
-	try {
-		 comentario = URLDecoder.decode(comentario,"UTF-8");
-		insertarRegistro(idUsuario,calificacion,comentario);
-		System.out.println(comentario);
-		
-	} catch (Exception e) {
-		
-	}
-		return "ok";
-
-   }*/
-	
-	
 	@RequestMapping(path = "/conversacion/{idUsuario}/{comentario}", method = RequestMethod.GET)
-	public @ResponseBody  String registrarConversacionNoManejada(@PathVariable String idUsuario,@PathVariable String comentario) {
+	public @ResponseBody  String registrarConversacionNoManejada(@PathVariable String idUsuario,
+			@PathVariable String comentario) {
 	
 	try {
-		System.out.println(comentario);
-		String comentario2 = URLDecoder.decode(comentario,"UTF-8");
-		System.out.println(comentario2);
-		 insertarConversacion(idUsuario,comentario2);
-		
+		 String comentarioDecodificado = URLDecoder.decode(comentario,"UTF-8");
+		 insertarConversacion(idUsuario,comentarioDecodificado);
 	} catch (Exception e) {
-		
+		System.out.println(e);
 	}
 		return "ok";
 	}
-	
-/*	@RequestMapping(path = "/conversacion/{idUsuario}/{comentario}", method = RequestMethod.GET)
-	public @ResponseBody  ArrayList<Country> registrarConversacionNoManejada(@PathVariable String idUsuario,@PathVariable String comentario) {
-	
-	try {
-		System.out.println(comentario);
-		String comentario2 = URLDecoder.decode(comentario,"UTF-8");
-		System.out.println(comentario2);
-		 insertarConversacion(idUsuario,comentario2);
-		
-	} catch (Exception e) {
-		
-	}
-	  Country country1 =  new Country("Peru", "Gran comida");
-	   Country country2 =  new Country("Alemania", "aa");
-	   ArrayList<Country> countries = new ArrayList<>();
-	   countries.add(country1);
-	   countries.add(country2);
-	   return countries;
-
-	}*/
-	
-/*	@RequestMapping(path = "/file", method = RequestMethod.GET)
-	public @ResponseBody  ArrayList<Country> registrarConversacionNoManejada() {
-	
-	try {
-		obtenerConversacionSinRespuesta();
-	} catch (Exception e) {
-		
-	}
-	  Country country1 =  new Country("Peru", "Gran comida");
-	   Country country2 =  new Country("Alemania", "aa");
-	   ArrayList<Country> countries = new ArrayList<>();
-	   countries.add(country1);
-	   countries.add(country2);
-	   return countries;
-
-	}*/
 	
 	@RequestMapping(path = "/estadoSolicitud/{numero}", method = RequestMethod.GET)
-	public @ResponseBody  SolicitudPrestamo getEstado(@PathVariable String numero) {
-
-    String estado = obtenerEstadoSolicitud(numero);
-    SolicitudPrestamo sol = new SolicitudPrestamo(estado);
-    System.out.println(sol.getEstado());
-    return sol;
-
-}
+	public @ResponseBody  SolicitudPrestamo getEstadoSolicitud(@PathVariable String numero) {
+	    String estado = obtenerEstadoSolicitud(numero);
+	    SolicitudPrestamo solicitud = new SolicitudPrestamo(estado);
+	    return solicitud;
+    }
 	
 	
 	@RequestMapping(path = "/fechaVencimiento/{idCliente}", method = RequestMethod.GET)
 	public @ResponseBody CuotaPrestamo getFechaVencimientoCuota(@PathVariable String idCliente) {
-
-    String fechaVencimiento = obtenerFechaVencimientoCuota(idCliente);
-    CuotaPrestamo cuotaPrestamo = new CuotaPrestamo(fechaVencimiento);
-    return cuotaPrestamo;
-
-}
+	    String fechaVencimiento = obtenerFechaVencimientoCuota(idCliente);
+	    CuotaPrestamo cuotaPrestamo = new CuotaPrestamo(fechaVencimiento);
+	    return cuotaPrestamo;
+    }
 	
 	  public  void insertarConversacion(String isUsuario, String conversacion) {
 		  
