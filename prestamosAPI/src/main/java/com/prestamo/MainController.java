@@ -56,7 +56,7 @@ public class MainController {
 
 		 try {
 			 final String TARGET_URL =
-		                "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyA5_-d6WUh-scXmS3XjQWRr84iaHKqBlmE";
+		                "https://vision.googleapis.com/v1/images:annotate?key=";
 		 URL serverUrl = new URL(TARGET_URL);
 		 URLConnection urlConnection = serverUrl.openConnection();
 		 urlConnection.setDoOutput(true);
