@@ -197,14 +197,30 @@ public class MainController {
 
 	  }
 	  
-	  public  void insertarSolicitudPrestamo(String idSolicitante, String motivo, double monto, double activo,
-			  double pasivo, double patrimonio, double costo, double ventaTotal, double gastosAdm, double gastosVent,double margenUti) {
+	  
+		@RequestMapping(path = "/solPrestamo/{idSolicitante}/{motivo}/{monto}/{activo}/{pasivo}/{patrimonio}/{costo}/{ventaTotal}/{gastosAdm}/{gastosVent}/{margenUti}/{pdf}", method = RequestMethod.GET)
+		public @ResponseBody  String registarSolicitudPrestamo(@PathVariable int idSolicitante,@PathVariable String motivo,@PathVariable double monto,@PathVariable double activo,
+				@PathVariable double pasivo,@PathVariable double patrimonio,@PathVariable double costo,@PathVariable double ventaTotal,@PathVariable double gastosAdm,@PathVariable double gastosVent, 
+				@PathVariable double margenUti, @PathVariable String pdf) {
+		
+		try {
+			insertarSolicitudPrestamo(idSolicitante,motivo, monto, activo, pasivo, patrimonio, costo,ventaTotal,gastosAdm,gastosVent,margenUti,pdf);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+			return "ok";
+		}
+	  
+	  public  void insertarSolicitudPrestamo(int idSolicitante, String motivo, double monto, double activo,
+			  double pasivo, double patrimonio, double costo, double ventaTotal, double gastosAdm, double gastosVent,
+			  double margenUti, String pdf) {
 		  
 		  String connectionUrl ="jdbc:sqlserver://JUANJO\\sqlpoc;database=Coop;integratedSecurity=true;";
 	        String insertSql = "INSERT INTO SolicitudPrestamo (IdSolicitante, Motivo, Monto, Estado, Activo, Pasivo, Patrimonio, Costo, VentaTotal,"
-	        		+ "GastosAdministrativos,GastosVentas,MargenUtilidad)"
-	                + "VALUES ('"+idSolicitante+"','"+motivo+"', '"+monto+"'"+"Creada"+"','"+activo+"', '"+pasivo+"', '"+patrimonio+"'"+costo+"','"+ventaTotal+"', '"+gastosAdm+"','"+gastosVent+"', '"+margenUti+"');";
+	        		+ "GastosAdministrativos,GastosVentas,MargenUtilidad,PDF)"
+	                + "VALUES ('"+idSolicitante+"','"+motivo+"', '"+monto+"','"+"EnProceso"+"','"+activo+"','"+pasivo+"','"+patrimonio+"','"+costo+"','"+ventaTotal+"', '"+gastosAdm+"','"+gastosVent+"', '"+margenUti+"', '"+pdf+"');";
 
+	        System.out.println(insertSql);
 	        ResultSet resultSet = null;
 
 	        try (Connection connection = DriverManager.getConnection(connectionUrl);
@@ -292,12 +308,12 @@ public class MainController {
  }
  
  
- public  void cambiarEstadoSolicitud(String idSolicitud, String estado) {
+ public  String cambiarEstadoSolicitud(String idSolicitud, String estado) {
 	  
 	  String connectionUrl ="jdbc:sqlserver://JUANJO\\sqlpoc;database=Coop;integratedSecurity=true;";
-       String insertSql = "UPDATE SolicitudPrestamo"
-               + "SET  Estado='"+estado+"where IdSolicitud= "+idSolicitud+"');";
-
+       String insertSql = "UPDATE SolicitudPrestamo "
+               + "SET  Estado='"+estado+"' where IdSolicitud= '"+idSolicitud+"';";
+       System.out.println(insertSql);
        ResultSet resultSet = null;
 
        try (Connection connection = DriverManager.getConnection(connectionUrl);
@@ -315,8 +331,15 @@ public class MainController {
        // Handle any errors that may have occurred.
        catch (Exception e) {
            e.printStackTrace();
+           return e.toString();
        }
-
+       return "ok";
+ }
+ 
+	@RequestMapping(path = "/cambiarEstadoSolicitud/{idSolicitud}/{estado}", method = RequestMethod.GET)
+	public @ResponseBody String actualizarEstadoSolicitud(@PathVariable String idSolicitud,@PathVariable String estado) {
+	    String mensaje = cambiarEstadoSolicitud(idSolicitud,estado);
+	    return mensaje;
  }
  
   public  void insertarRegistro(String isUsuario, String calificacion, String comentario) {
@@ -405,6 +428,8 @@ public class MainController {
             	}else if(resultSet.getString(1).contains("Rechazado"))
             	{
                 	estado = "Su Solicitud fue:"+ resultSet.getString(1)+". El motivo fue: "+resultSet.getString(2);
+            	}else {
+            		estado = "Su Solicitud se encuentra:"+ resultSet.getString(1);
             	}
             }
         }
@@ -416,6 +441,97 @@ public class MainController {
 
   }
   
+	@RequestMapping(path = "/listadoSolicitudes", method = RequestMethod.GET)
+	public @ResponseBody  ArrayList<SolicitudPrestamo> obtenerListadoSolicitudes() {
+		ArrayList<SolicitudPrestamo> solicitudes = obtenerListadoDeSolicitudesPrestamo();
+	    return solicitudes;
+}
+  
+  public  ArrayList<SolicitudPrestamo> obtenerListadoDeSolicitudesPrestamo() {
+	  
+	  String connectionUrl ="jdbc:sqlserver://JUANJO\\sqlpoc;database=Coop;integratedSecurity=true;";
+      String insertSql = "SELECT*FROM SolicitudPrestamo";
+      String estado = null;
+      ResultSet resultSet = null;
+      ArrayList<SolicitudPrestamo> solicitudes = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(connectionUrl);
+            PreparedStatement prepsInsertProduct = connection.prepareStatement(insertSql);) {
+            resultSet = prepsInsertProduct.executeQuery();
+            while (resultSet.next()) {
+            	SolicitudPrestamo solicitud = new SolicitudPrestamo(resultSet.getString(5),resultSet.getString(1),resultSet.getInt(2),
+            			resultSet.getString(3),resultSet.getDouble(4),resultSet.getDouble(6),resultSet.getDouble(7),resultSet.getDouble(8),
+            			resultSet.getDouble(9),resultSet.getDouble(10),resultSet.getDouble(11));
+            	solicitudes.add(solicitud);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+         
+        return solicitudes;
+
+  }
+  
+	@RequestMapping(path = "/listadoPropuestas", method = RequestMethod.GET)
+	public @ResponseBody  ArrayList<PropuestaPrestamo> obtenerListadoPropuestasPrestamo() {
+		ArrayList<PropuestaPrestamo> propuestas = obtenerListadoPropuestas();
+	    return propuestas;
+    }
+	
+  public  ArrayList<PropuestaPrestamo> obtenerListadoPropuestas() {
+	  
+	  String connectionUrl ="jdbc:sqlserver://JUANJO\\sqlpoc;database=Coop;integratedSecurity=true;";
+      String insertSql = "SELECT*FROM PropuestaPrestamo";
+      String estado = null;
+      ResultSet resultSet = null;
+      ArrayList<PropuestaPrestamo> propuestas = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(connectionUrl);
+            PreparedStatement prepsInsertProduct = connection.prepareStatement(insertSql);) {
+            resultSet = prepsInsertProduct.executeQuery();
+            while (resultSet.next()) {
+            	PropuestaPrestamo propuesta = new PropuestaPrestamo(resultSet.getInt(1),resultSet.getString(2),resultSet.getDouble(3),
+            			resultSet.getString(4),resultSet.getDouble(5),resultSet.getString(6));
+            	propuestas.add(propuesta);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+         
+        return propuestas;
+
+  }
+  
+  
+	@RequestMapping(path = "/listadoPrestamos", method = RequestMethod.GET)
+	public @ResponseBody  ArrayList<Prestamo> obtenerPrestamos() {
+		ArrayList<Prestamo> prestamos = obtenerListadoPrestamos();
+	    return prestamos;
+  }
+	
+public  ArrayList<Prestamo> obtenerListadoPrestamos() {
+	  
+	  String connectionUrl ="jdbc:sqlserver://JUANJO\\sqlpoc;database=Coop;integratedSecurity=true;";
+    String insertSql = "SELECT*FROM Prestamo";
+    String estado = null;
+    ResultSet resultSet = null;
+    ArrayList<Prestamo> prestamos = new ArrayList<>();
+      try (Connection connection = DriverManager.getConnection(connectionUrl);
+          PreparedStatement prepsInsertProduct = connection.prepareStatement(insertSql);) {
+          resultSet = prepsInsertProduct.executeQuery();
+          while (resultSet.next()) {
+        	  Prestamo prestamo = new Prestamo(resultSet.getInt(1),resultSet.getInt(2),resultSet.getInt(3),
+          			resultSet.getDouble(4),resultSet.getString(5),resultSet.getString(6));
+        	  prestamos.add(prestamo);
+          }
+      }
+      catch (Exception e) {
+          e.printStackTrace();
+      }
+       
+      return prestamos;
+
+}
   
   public  String obtenerFechaVencimientoCuota(String idCliente) {
 	  

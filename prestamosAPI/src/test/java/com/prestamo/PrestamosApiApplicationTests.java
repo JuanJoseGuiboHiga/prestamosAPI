@@ -58,10 +58,10 @@ public class PrestamosApiApplicationTests {
 	        .body("estado", equalTo("Su Solicitud fue:Rechazado. El motivo fue: El préstamo fue cancelado ya que el solicitante tiene un mal score crediticio"));
 	}
 	
-/*	@Test
+	@Test
 	public void fechaVencimientoTest() {
-	       get("/fechaVencimiento/73490431")
+	       get("/fechaVencimiento/89652489")
 	        .then()
-	        .body("estado", equalTo("Su Solicitud fue:Rechazado. El motivo fue: El préstamo fue cancelado ya que el solicitante tiene un mal score crediticio"));
-	}*/
+	        .body("fechaVencimiento", equalTo("2019/06/21"));
+	}
 }
