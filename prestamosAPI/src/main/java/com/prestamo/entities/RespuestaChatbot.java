@@ -1,4 +1,4 @@
-package com.prestamo;
+package com.prestamo.entities;
 
 public class RespuestaChatbot {
 	private String respuesta;

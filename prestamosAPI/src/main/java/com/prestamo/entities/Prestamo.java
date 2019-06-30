@@ -1,9 +1,6 @@
-package com.prestamo;
+package com.prestamo.entities;
 
 public class Prestamo {
-
-
-
 	private int idPrestamo;
 	private int idPropuesta;
 	private int idCliente;
@@ -11,37 +8,55 @@ public class Prestamo {
 	private String motivo;
 	private String estado;
 	
-	public Prestamo(int idPrestamo, int idPropuesta, int idCliente, double monto, String motivo, String estado) {
+	public Prestamo() {
 		super();
-		this.idPrestamo = idPrestamo;
-		this.idPropuesta = idPropuesta;
-		this.idCliente = idCliente;
-		this.monto = monto;
-		this.motivo = motivo;
-		this.estado = estado;
 	}
 	
 	public int getIdPrestamo() {
 		return idPrestamo;
 	}
 
+	public void setIdPrestamo(int idPrestamo) {
+		this.idPrestamo = idPrestamo;
+	}
+
 	public int getIdPropuesta() {
 		return idPropuesta;
+	}
+
+	public void setIdPropuesta(int idPropuesta) {
+		this.idPropuesta = idPropuesta;
 	}
 
 	public int getIdCliente() {
 		return idCliente;
 	}
 
+	public void setIdCliente(int idCliente) {
+		this.idCliente = idCliente;
+	}
+
 	public double getMonto() {
 		return monto;
+	}
+
+	public void setMonto(double monto) {
+		this.monto = monto;
 	}
 
 	public String getMotivo() {
 		return motivo;
 	}
 
+	public void setMotivo(String motivo) {
+		this.motivo = motivo;
+	}
+
 	public String getEstado() {
 		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 }
