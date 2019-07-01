@@ -11,8 +11,8 @@ public class ClienteDAO implements ClienteDAOInterface{
 	public void registrarCliente(Cliente cliente) {
 		  DBConnection conexion = DBConnection.getInstance();
 		  JdbcTemplate jdbcTemplate = conexion.getJdbcTemplate(); 
-		  String sql = "INSERT INTO Cliente (IdCliente,Nombre,TipoDocumento,NumeroDocumento,Direccion,Correo,Telefono,Estado) VALUES(?,?,?,?,?,?)";
-		  jdbcTemplate.update(sql, new Object[] {cliente.getIdCliente(),cliente.getNombre(),cliente.getTipoDocumento(),cliente.getNumeroDocumento(),
+		  String sql = "INSERT INTO Cliente (Nombre,TipoDocumento,NumeroDocumento,Direccion,Correo,Telefono,Estado) VALUES(?,?,?,?,?,?)";
+		  jdbcTemplate.update(sql, new Object[] {cliente.getNombre(),cliente.getTipoDocumento(),cliente.getNumeroDocumento(),
 				  cliente.getDireccion(),cliente.getCorreo(),cliente.getTelefono(),cliente.getEstado()});
 		
 	}

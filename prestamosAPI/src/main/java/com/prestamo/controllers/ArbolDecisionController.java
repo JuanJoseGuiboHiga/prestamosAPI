@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class ArbolDecisionController {
 	@RequestMapping(path = "/arbolDecision", method = RequestMethod.GET)
-	public @ResponseBody void getPy() {
+	public @ResponseBody void ejecutarArbol() {
 
 		 try {
 			 obtenerHistorial();
@@ -56,7 +56,6 @@ public class ArbolDecisionController {
 	            // Retrieve the generated key from the insert.
 	            resultSet = prepsInsertProduct.executeQuery();
 	            // Print the ID of the inserted row.
-	            clearTheFile();
 	            File file = new File("C://Users//JuanJosé//Desktop///python/historico.csv");
 	            
 	            //Create the file

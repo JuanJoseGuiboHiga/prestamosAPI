@@ -16,8 +16,8 @@ public class PropuestaPrestamoDAO implements PropuestaPrestamoDAOInterface{
 	public void registrarPropuestaPrestamo(PropuestaPrestamo propuesta) {
 		  DBConnection conexion = DBConnection.getInstance();
 		  JdbcTemplate jdbcTemplate = conexion.getJdbcTemplate();  
-		  String sql = "INSERT INTO PropuestaPrestamo (IdPropuesta,IdSolicitud,Monto,Plazo,TasaInteres,Comentario,Estado) VALUES(?,?,?,?,?,?,?)";
-		  jdbcTemplate.update(sql, new Object[] { propuesta.getIdPropuesta(), propuesta.getIdSolicitud(),propuesta.getMonto(),propuesta.getPlazo(),
+		  String sql = "INSERT INTO PropuestaPrestamo (IdSolicitud,Monto,Plazo,TasaInteres,Comentario,Estado) VALUES(?,?,?,?,?,?,?)";
+		  jdbcTemplate.update(sql, new Object[] { propuesta.getIdSolicitud(),propuesta.getMonto(),propuesta.getPlazo(),
 				  propuesta.getTasaInteres(),propuesta.getComentario(),propuesta.getEstado()});
 	}
 

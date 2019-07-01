@@ -1,5 +1,7 @@
 package com.prestamo.controllers;
 
+import java.util.List;
+
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -14,35 +16,37 @@ import com.prestamo.entities.SolicitudPrestamo;
 @Controller
 public class SolicitudPrestamoController {
 
-	@RequestMapping(path = "/test/{id}", method = RequestMethod.GET)
-	public @ResponseBody void test(@PathVariable String id) {
+	@RequestMapping(path = "/listadoSolicitudes", method = RequestMethod.GET)
+	public @ResponseBody List<SolicitudPrestamo> listarSolicitudes() {
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		context.getBean("conexion");
 		SolicitudPrestamoDAO solicitudDAO =(SolicitudPrestamoDAO) context.getBean("solicitudPrestamoDAO");
-        solicitudDAO.listarSolicitudesPrestamo();
+		List<SolicitudPrestamo> listado =solicitudDAO.listarSolicitudesPrestamo();
         context.close();
+        return listado;
   }
 	
-	@RequestMapping(path = "/registrarTest", method = RequestMethod.GET)
-	public @ResponseBody void registrarSolicitudPrestamo() {
+	@RequestMapping(path = "/registrarSolPres/{idSolicitante}/{motivo}/{monto}/{activo}/{pasivo}/{patrimonio}/{costo}/{ventaTotal}/{gastosAdm}/{gastosVent}/{margenUti}/{pdf}", method = RequestMethod.GET)
+	public @ResponseBody void registrarSolicitudPrestamo(@PathVariable int idSolicitante,@PathVariable String motivo,@PathVariable double monto,@PathVariable double activo,
+			@PathVariable double pasivo,@PathVariable double patrimonio,@PathVariable double costo,@PathVariable double ventaTotal,@PathVariable double gastosAdm,@PathVariable double gastosVent, 
+			@PathVariable double margenUti, @PathVariable String pdf) {
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		SolicitudPrestamoDAO solicitudDAO =(SolicitudPrestamoDAO) context.getBean("solicitudPrestamoDAO");
 		context.getBean("conexion");
 		SolicitudPrestamo solicitud = new SolicitudPrestamo();
-		solicitud.setIdSolicitud("SOL004");
-		solicitud.setIdSolicitante(1);
-		solicitud.setMotivo("Credito Prueba");
-		solicitud.setMonto(9000);
+		solicitud.setIdSolicitante(idSolicitante);
+		solicitud.setMotivo(motivo);
+		solicitud.setMonto(monto);
 		solicitud.setEstado("En Proceso");
-		solicitud.setActivo(100);
-		solicitud.setPasivo(200);
-		solicitud.setPatrimonio(300);
-		solicitud.setCosto(400);
-		solicitud.setVentaTotal(500);
-		solicitud.setGastosAdministrativos(600);
-		solicitud.setGastosVentas(700);
-		solicitud.setMargenUtilidad(8000);
-		solicitud.setPdf("pdf3");
+		solicitud.setActivo(activo);
+		solicitud.setPasivo(pasivo);
+		solicitud.setPatrimonio(patrimonio);
+		solicitud.setCosto(costo);
+		solicitud.setVentaTotal(ventaTotal);
+		solicitud.setGastosAdministrativos(gastosAdm);
+		solicitud.setGastosVentas(gastosVent);
+		solicitud.setMargenUtilidad(margenUti);
+		solicitud.setPdf(pdf);
         solicitudDAO.registrarSolicitudPrestamo(solicitud);
         context.close();
   }

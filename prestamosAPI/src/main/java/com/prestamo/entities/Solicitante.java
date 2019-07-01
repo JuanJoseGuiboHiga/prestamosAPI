@@ -3,6 +3,7 @@ package com.prestamo.entities;
 public class Solicitante {
 
 	private int idSolicitante;
+	private int idUsuario;
 	private String nombre;
 	private String tipoDocumento;
 	private String numeroDocumento;
@@ -60,4 +61,13 @@ public class Solicitante {
 	public void setTelefono(int telefono) {
 		this.telefono = telefono;
 	}
+
+	public int getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(int idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+	
 }

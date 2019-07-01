@@ -60,7 +60,7 @@ public class MainController {
 
 	AIConfiguration configuration = new AIConfiguration("");
 	AIDataService dataService = new AIDataService(configuration);
-	@RequestMapping(path = "/ocr", method = RequestMethod.GET)
+/*	@RequestMapping(path = "/ocr", method = RequestMethod.GET)
 	public @ResponseBody void getOCR() {
 
 		 try {
@@ -98,8 +98,8 @@ public class MainController {
 		}
 		
 	}
-	
-	@RequestMapping(path = "/arbolDecision", method = RequestMethod.GET)
+	*/
+/*	@RequestMapping(path = "/arbolDecision", method = RequestMethod.GET)
 	public @ResponseBody void getPy() {
 
 		 try {
@@ -114,7 +114,7 @@ public class MainController {
 			e.printStackTrace();
 		}
 		
-	}
+	}*/
 	
 	
 	 public  void obtenerHistorial() {
@@ -187,7 +187,7 @@ public class MainController {
 
 	  }
 	 
-	@RequestMapping(path = "/nlp/{conversacion}", method = RequestMethod.GET)
+/*	@RequestMapping(path = "/nlp/{conversacion}", method = RequestMethod.GET)
 		public @ResponseBody  RespuestaChatbot getRespuestaChatbot(@PathVariable String conversacion) {
 	      RespuestaChatbot respuestaChat = null;
         	AIResponse response;
@@ -207,8 +207,8 @@ public class MainController {
 		    return respuestaChat;
 
 	}
-	
-	@RequestMapping(path = "/sql/{idUsuario}/{calificacion}/{comentario}", method = RequestMethod.GET)
+	*/
+/*	@RequestMapping(path = "/sql/{idUsuario}/{calificacion}/{comentario}", method = RequestMethod.GET)
 	public @ResponseBody  String registrarCalificacion(@PathVariable String idUsuario
 			,@PathVariable String calificacion,@PathVariable String comentario) {
 		try {
@@ -219,9 +219,9 @@ public class MainController {
 		}
 	    return "La calificacion se registro correctamente";
     }
-	
+	*/
 
-	@RequestMapping(path = "/conversacion/{idUsuario}/{comentario}", method = RequestMethod.GET)
+/*	@RequestMapping(path = "/conversacion/{idUsuario}/{comentario}", method = RequestMethod.GET)
 	public @ResponseBody  String registrarConversacionNoManejada(@PathVariable String idUsuario,
 			@PathVariable String comentario) {
 	
@@ -232,7 +232,7 @@ public class MainController {
 		System.out.println(e);
 	}
 		return "ok";
-	}
+	}*/
 	
 	@RequestMapping(path = "/estadoSolicitud/{numero}", method = RequestMethod.GET)
 	public @ResponseBody  SolicitudPrestamo getEstadoSolicitud(@PathVariable String numero) {
@@ -242,12 +242,12 @@ public class MainController {
     }
 	
 	
-	@RequestMapping(path = "/fechaVencimiento/{idCliente}", method = RequestMethod.GET)
+/*	@RequestMapping(path = "/fechaVencimiento/{idCliente}", method = RequestMethod.GET)
 	public @ResponseBody CuotaPrestamo getFechaVencimientoCuota(@PathVariable String idCliente) {
 	    String fechaVencimiento = obtenerFechaVencimientoCuota(idCliente);
 	    CuotaPrestamo cuotaPrestamo = new CuotaPrestamo(fechaVencimiento);
 	    return cuotaPrestamo;
-    }
+    }*/
 	
 	  public  void insertarConversacion(String isUsuario, String conversacion) {
 		  
