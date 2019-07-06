@@ -13,8 +13,10 @@ import com.prestamo.entities.Solicitante;
 @Controller
 public class SolicitanteController {
 	
-	@RequestMapping(path = "/registrarSolicitante/{nombre}/{tipodocumento}/{numerodocumento}/{correo}/{telefono}", method = RequestMethod.GET)
-	public @ResponseBody int registrarSolicitante(@PathVariable String nombre, @PathVariable String tipodocumento,@PathVariable String numerodocumento,
+	@RequestMapping(path = "/registrarSolicitante/{nombre}/{tipodocumento}/{numerodocumento}/{correo}/{telefono}",
+			method = RequestMethod.GET)
+	public @ResponseBody int registrarSolicitante(@PathVariable String nombre, @PathVariable String tipodocumento,
+			@PathVariable String numerodocumento,
 			@PathVariable String correo,@PathVariable int telefono) {
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		SolicitanteDAO solicitanteDAO =(SolicitanteDAO) context.getBean("solicitanteDAO");
@@ -29,4 +31,17 @@ public class SolicitanteController {
         context.close();
         return key;
   }
+	
+	@RequestMapping(path = "/buscarSolicitante/{idPropuesta}",
+			method = RequestMethod.GET)
+	public @ResponseBody Solicitante buscarSolicitante(@PathVariable int idPropuesta) {
+		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		SolicitanteDAO solicitanteDAO =(SolicitanteDAO) context.getBean("solicitanteDAO");
+		context.getBean("conexion");
+		Solicitante solicitante = solicitanteDAO.buscarSolicitante(idPropuesta);
+        context.close();
+        return solicitante;
+  }
+	
+	
 }

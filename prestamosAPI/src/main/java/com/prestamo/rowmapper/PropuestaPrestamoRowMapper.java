@@ -13,7 +13,7 @@ public class PropuestaPrestamoRowMapper implements RowMapper<PropuestaPrestamo> 
 	public PropuestaPrestamo mapRow(ResultSet rs, int rowNum) throws SQLException {
 		PropuestaPrestamo propuesta = new PropuestaPrestamo();
 		propuesta.setIdPropuesta(rs.getInt("IdPropuesta"));
-		propuesta.setIdSolicitud(rs.getString("IdSolicitud"));
+		propuesta.setIdSolicitud(rs.getInt("IdSolicitud"));
 		propuesta.setMonto(rs.getDouble("Monto"));
 		propuesta.setPlazo(rs.getString("Plazo"));
 		propuesta.setTasaInteres(rs.getString("TasaInteres"));

@@ -3,6 +3,7 @@ package com.prestamo.controllers;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,18 +21,18 @@ public class PrestamoController {
         context.close();
   }
 	
-	@RequestMapping(path = "/registrarPrestamo", method = RequestMethod.GET)
-	public @ResponseBody void registrarPrestamo() {
+	@RequestMapping(path = "/registrarPrestamo/{idPropuesta}/{idCliente}/{monto}/{motivo}", method = RequestMethod.GET)
+	public @ResponseBody void registrarPrestamo(@PathVariable int idPropuesta,@PathVariable int idCliente,
+			@PathVariable double monto,@PathVariable String motivo) {
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		PrestamoDAO prestamoDAO =(PrestamoDAO) context.getBean("prestamoDAO");
 		context.getBean("conexion");
 		Prestamo prestamo = new Prestamo();
-		prestamo.setIdPrestamo(0);
-		prestamo.setIdPropuesta(0);
-		prestamo.setIdCliente(0);
-		prestamo.setMonto(0.0);
-		prestamo.setMotivo("");
-		prestamo.setEstado("");
+		prestamo.setIdPropuesta(idPropuesta);
+		prestamo.setIdCliente(idCliente);
+		prestamo.setMonto(monto);
+		prestamo.setMotivo(motivo);
+		prestamo.setEstado("Creado");
 		prestamoDAO.registrarPrestamo(prestamo);
         context.close();
   }

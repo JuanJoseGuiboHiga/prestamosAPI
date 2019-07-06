@@ -3,6 +3,7 @@ package com.prestamo.controllers;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -12,20 +13,22 @@ import com.prestamo.entities.Cliente;
 @Controller
 public class ClienteController {
 	
-	@RequestMapping(path = "/registrarCliente", method = RequestMethod.GET)
-	public @ResponseBody void registrarCliente() {
+	@RequestMapping(path = "/registrarCliente/{nombre}/{tipodocumento}/{numerodocumento}/{correo}/{telefono}", method = RequestMethod.GET)
+	public @ResponseBody int registrarCliente(@PathVariable String nombre, @PathVariable String tipodocumento,
+			@PathVariable String numerodocumento,
+			@PathVariable String correo,@PathVariable int telefono) {
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		ClienteDAO clienteDAO =(ClienteDAO) context.getBean("clienteDAO");
 		context.getBean("conexion");
 		Cliente cliente = new Cliente();
-		cliente.setNombre("");
-		cliente.setTipoDocumento("");
-		cliente.setNumeroDocumento("");
-		cliente.setDireccion("");
-		cliente.setCorreo("");
-		cliente.setTelefono(0);
+		cliente.setNombre(nombre);
+		cliente.setTipoDocumento(tipodocumento);
+		cliente.setNumeroDocumento(numerodocumento);
+		cliente.setCorreo(correo);
+		cliente.setTelefono(telefono);
 		cliente.setEstado("");
-		clienteDAO.registrarCliente(cliente);
+		int key = clienteDAO.registrarCliente(cliente);
         context.close();
+        return key;
   }
 }

@@ -6,7 +6,6 @@ public class Cliente {
 	private String nombre;
 	private String tipoDocumento;
 	private String numeroDocumento;
-	private String direccion;
 	private String correo;
 	private int telefono;
 	private String estado;
@@ -38,12 +37,6 @@ public class Cliente {
 	}
 	public void setNumeroDocumento(String numeroDocumento) {
 		this.numeroDocumento = numeroDocumento;
-	}
-	public String getDireccion() {
-		return direccion;
-	}
-	public void setDireccion(String direccion) {
-		this.direccion = direccion;
 	}
 	public String getCorreo() {
 		return correo;

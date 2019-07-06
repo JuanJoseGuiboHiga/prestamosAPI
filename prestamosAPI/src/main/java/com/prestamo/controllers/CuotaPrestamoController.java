@@ -22,7 +22,6 @@ public class CuotaPrestamoController {
 		cliente.setNombre("");
 		cliente.setTipoDocumento("");
 		cliente.setNumeroDocumento("");
-		cliente.setDireccion("");
 		cliente.setCorreo("");
 		cliente.setTelefono(0);
 		cliente.setEstado("");

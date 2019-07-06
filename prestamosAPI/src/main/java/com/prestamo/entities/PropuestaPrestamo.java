@@ -3,7 +3,7 @@ package com.prestamo.entities;
 public class PropuestaPrestamo {
 
 	private int idPropuesta;
-	private String idSolicitud;
+	private int idSolicitud;
 	private double monto;
 	private String plazo;
 	private String tasaInteres;
@@ -20,10 +20,10 @@ public class PropuestaPrestamo {
 	public void setIdPropuesta(int idPropuesta) {
 		this.idPropuesta = idPropuesta;
 	}
-	public String getIdSolicitud() {
+	public int getIdSolicitud() {
 		return idSolicitud;
 	}
-	public void setIdSolicitud(String idSolicitud) {
+	public void setIdSolicitud(int idSolicitud) {
 		this.idSolicitud = idSolicitud;
 	}
 	public double getMonto() {

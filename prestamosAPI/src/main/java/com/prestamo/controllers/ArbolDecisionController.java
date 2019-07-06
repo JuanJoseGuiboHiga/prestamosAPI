@@ -19,20 +19,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class ArbolDecisionController {
 	@RequestMapping(path = "/arbolDecision", method = RequestMethod.GET)
-	public @ResponseBody void ejecutarArbol() {
-
+	public @ResponseBody String ejecutarArbol() {
+		 String s = null;
+		 String respuesta= null;
 		 try {
-			 obtenerHistorial();
+		//	 obtenerHistorial();
 			 Process p = Runtime.getRuntime().exec("python C://Users/JuanJosé/Desktop/python/clasificador.py > nuevo.txt");
 			 BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			 String s = null;
+
 			 while ((s =  in.readLine()) != null) {
-				    System.out.println(s);
+				 respuesta = s;
 				}
 		 } catch (Exception e) {		
 			e.printStackTrace();
 		}
 		
+		 return respuesta;
 	}
 	
 	 public  void obtenerHistorial() {

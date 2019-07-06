@@ -18,6 +18,8 @@
     </bean>
     <bean id="solicitanteDAO" class="com.prestamo.dao.SolicitanteDAO">
     </bean>
+        <bean id="ratiosFinancierosDAO" class="com.prestamo.dao.RatiosFinancierosDAO">
+    </bean>
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
 	    <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
 	    <property name="url" value="jdbc:sqlserver://JUANJO\sqlpoc;database=Coop;integratedSecurity=true;" />

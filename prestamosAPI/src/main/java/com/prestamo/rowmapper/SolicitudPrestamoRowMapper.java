@@ -18,6 +18,7 @@ public class SolicitudPrestamoRowMapper  implements RowMapper<SolicitudPrestamo>
         solicitud.setIdSolicitante(rs.getInt("IdSolicitante"));
         solicitud.setMotivo(rs.getString("Motivo"));
         solicitud.setMonto(rs.getDouble("Monto"));
+        solicitud.setPlazo(rs.getString("Plazo"));
         solicitud.setEstado(rs.getString("Estado"));
         solicitud.setActivo(rs.getDouble("Activo"));
         solicitud.setPasivo(rs.getDouble("Pasivo"));

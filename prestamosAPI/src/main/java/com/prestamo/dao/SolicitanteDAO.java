@@ -13,6 +13,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import com.prestamo.connection.DBConnection;
 import com.prestamo.entities.Solicitante;
 import com.prestamo.interfaces.SolicitanteDAOInterface;
+import com.prestamo.rowmapper.SolicitanteRowMapper;
 
 public class SolicitanteDAO implements SolicitanteDAOInterface{
 
@@ -40,6 +41,20 @@ public class SolicitanteDAO implements SolicitanteDAOInterface{
 		              }, holder);
 		  Number k = holder.getKey();
 		  return  k.intValue();
+	}
+	
+	@Override
+	public Solicitante buscarSolicitante(int idPropuesta) {
+		 DBConnection conexion = DBConnection.getInstance();
+		 JdbcTemplate jdbcTemplate = conexion.getJdbcTemplate();
+		 String query = "Select Solicitante.IdSolicitante,Solicitante.IdUsuario, Solicitante.Nombre, Solicitante.TipoDocumento, Solicitante.NumeroDocumento,Solicitante.Correo,Solicitante.Telefono from Solicitante\r\n" + 
+		 		"INNER JOIN SolicitudPrestamo\r\n" + 
+		 		"ON Solicitante.IdSolicitante = SolicitudPrestamo.IdSolicitante\r\n" + 
+		 		"INNER JOIN PropuestaPrestamo\r\n" + 
+		 		"ON SolicitudPrestamo.IdSolicitud = PropuestaPrestamo.IdSolicitud\r\n" + 
+		 		"where IdPropuesta ="+idPropuesta+";";
+	     Solicitante solicitante = jdbcTemplate.queryForObject(query, new SolicitanteRowMapper());
+	     return solicitante;
 	}
 
 }

@@ -17,7 +17,7 @@ public class PrestamoDAO implements PrestamoDAOInterface {
 	public void registrarPrestamo(Prestamo prestamo) {
 		 DBConnection conexion = DBConnection.getInstance();
 		 JdbcTemplate jdbcTemplate = conexion.getJdbcTemplate(); 
-		 String sql = "INSERT INTO Prestamo (IdPropuesta,IdCliente,Monto,Motivo,Estado) VALUES(?,?,?,?,?,?)";
+		 String sql = "INSERT INTO Prestamo (IdPropuesta,IdCliente,Monto,Motivo,Estado) VALUES(?,?,?,?,?)";
 		 jdbcTemplate.update(sql, new Object[] { prestamo.getIdPropuesta(),prestamo.getIdCliente(),prestamo.getMonto(),
 				 prestamo.getMotivo(),prestamo.getEstado()});
 	}

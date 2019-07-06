@@ -1,5 +1,7 @@
 package com.prestamo.controllers;
 
+import java.util.List;
+
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -9,38 +11,40 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.prestamo.dao.PropuestaPrestamoDAO;
 import com.prestamo.entities.PropuestaPrestamo;
+import com.prestamo.entities.SolicitudPrestamo;
 
 @Controller
 public class PropuestaPrestamoController {
 	
 	@RequestMapping(path = "/listarPropuestasPrestamos", method = RequestMethod.GET)
-	public @ResponseBody void listarPropuestaPrestamo() {
+	public @ResponseBody List<PropuestaPrestamo> listarPropuestaPrestamo() {
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		context.getBean("conexion");
 		PropuestaPrestamoDAO propuestaPrestamoDAO =(PropuestaPrestamoDAO) context.getBean("propuestaPrestamoDAO");
-		propuestaPrestamoDAO.listarPropuestaPrestamo();
+		List<PropuestaPrestamo> listado = propuestaPrestamoDAO.listarPropuestaPrestamo();
         context.close();
+        return listado;
   }
 	
-	@RequestMapping(path = "/registrarPropuestaPrestamo", method = RequestMethod.GET)
-	public @ResponseBody void registrarPropuestaPrestamo() {
+	@RequestMapping(path = "/registrarPropuestaPrestamo/{idSolicitud}/{monto}/{plazo}/{tasaInteres}/{comentario}/{estado}", method = RequestMethod.GET)
+	public @ResponseBody void registrarPropuestaPrestamo(@PathVariable int idSolicitud,@PathVariable double monto,@PathVariable String plazo,@PathVariable String tasaInteres,
+			@PathVariable String comentario,@PathVariable String estado) {
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		PropuestaPrestamoDAO propuestaPrestamoDAO =(PropuestaPrestamoDAO) context.getBean("propuestaPrestamoDAO");
 		context.getBean("conexion");
 		PropuestaPrestamo propuesta = new PropuestaPrestamo();
-		propuesta.setIdPropuesta(0);
-		propuesta.setIdSolicitud("");
-		propuesta.setMonto(0.0);
-		propuesta.setPlazo("");
-		propuesta.setTasaInteres("");
-		propuesta.setComentario("");
-		propuesta.setEstado("");
+		propuesta.setIdSolicitud(idSolicitud);
+		propuesta.setMonto(monto);
+		propuesta.setPlazo(plazo);
+		propuesta.setTasaInteres(tasaInteres);
+		propuesta.setComentario(comentario);
+		propuesta.setEstado(estado);
 		propuestaPrestamoDAO.registrarPropuestaPrestamo(propuesta);
         context.close();
   }
 	
-	@RequestMapping(path = "/actualizarPropuesta/{idSolicitud}/{estado}", method = RequestMethod.GET)
-	public @ResponseBody void actualizarEstadoPropuesta(@PathVariable String idPropuesta,@PathVariable String estado) {
+	@RequestMapping(path = "/actualizarPropuesta/{idPropuesta}/{estado}", method = RequestMethod.GET)
+	public @ResponseBody void actualizarEstadoPropuesta(@PathVariable int idPropuesta,@PathVariable String estado) {
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		context.getBean("conexion");
 		PropuestaPrestamoDAO propuestaPrestamoDAO =(PropuestaPrestamoDAO) context.getBean("propuestaPrestamoDAO");

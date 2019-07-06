@@ -8,5 +8,6 @@ import com.prestamo.entities.SolicitudPrestamo;
 public interface SolicitudPrestamoDAOInterface {
     public void registrarSolicitudPrestamo(SolicitudPrestamo solicitud);
     public  List<SolicitudPrestamo> listarSolicitudesPrestamo();
+    public  SolicitudPrestamo buscarSolicitud(int idPropuesta);
     public void actualizarEstadoSolicitud(String idSolicitud , String estado);
 }
