@@ -18,7 +18,11 @@
     </bean>
     <bean id="solicitanteDAO" class="com.prestamo.dao.SolicitanteDAO">
     </bean>
-        <bean id="ratiosFinancierosDAO" class="com.prestamo.dao.RatiosFinancierosDAO">
+    <bean id="ratiosFinancierosDAO" class="com.prestamo.dao.RatiosFinancierosDAO">
+    </bean>
+    <bean id="usuarioDAO" class="com.prestamo.dao.UsuarioDAO">
+    </bean>
+    <bean id="cuotaDAO" class="com.prestamo.dao.CuotaPrestamoDAO">
     </bean>
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
 	    <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />

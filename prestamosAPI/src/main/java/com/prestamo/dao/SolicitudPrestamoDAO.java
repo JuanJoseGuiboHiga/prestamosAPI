@@ -22,7 +22,7 @@ public class SolicitudPrestamoDAO implements SolicitudPrestamoDAOInterface{
 	public List<SolicitudPrestamo> listarSolicitudesPrestamo() {
 		 DBConnection conexion = DBConnection.getInstance();
 		 JdbcTemplate jdbcTemplate = conexion.getJdbcTemplate();
-	     List<SolicitudPrestamo> solicitudes = jdbcTemplate.query("select * from SolicitudPrestamo", new SolicitudPrestamoRowMapper());
+	     List<SolicitudPrestamo> solicitudes = jdbcTemplate.query("select * from SolicitudPrestamo where estado ='En Proceso' ", new SolicitudPrestamoRowMapper());
 	     System.out.println(solicitudes.get(0).getEstado().toString());
 	     return solicitudes;
 	}

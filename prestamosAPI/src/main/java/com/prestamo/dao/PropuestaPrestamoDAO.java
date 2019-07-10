@@ -25,8 +25,6 @@ public class PropuestaPrestamoDAO implements PropuestaPrestamoDAOInterface{
 		  DBConnection conexion = DBConnection.getInstance();
 		  JdbcTemplate jdbcTemplate = conexion.getJdbcTemplate();  
 		  String sql = "INSERT INTO PropuestaPrestamo (IdSolicitud,Monto,Plazo,TasaInteres,Comentario,Estado) VALUES(?,?,?,?,?,?)";
-		  jdbcTemplate.update(sql, new Object[] { propuesta.getIdSolicitud(),propuesta.getMonto(),propuesta.getPlazo(),
-				  propuesta.getTasaInteres(),propuesta.getComentario(),propuesta.getEstado()});
 		  KeyHolder holder = new GeneratedKeyHolder();
 		  jdbcTemplate.update(new PreparedStatementCreator() {
 		                  @Override
@@ -49,7 +47,7 @@ public class PropuestaPrestamoDAO implements PropuestaPrestamoDAOInterface{
 	public List<PropuestaPrestamo> listarPropuestaPrestamo() {
 		 DBConnection conexion = DBConnection.getInstance();
 		 JdbcTemplate jdbcTemplate = conexion.getJdbcTemplate();
-	     List<PropuestaPrestamo> propuestaPrestamo = jdbcTemplate.query("select * from PropuestaPrestamo", new PropuestaPrestamoRowMapper());
+	     List<PropuestaPrestamo> propuestaPrestamo = jdbcTemplate.query("select * from PropuestaPrestamo where estado ='Creada'", new PropuestaPrestamoRowMapper());
 	     return propuestaPrestamo;
 	}
 

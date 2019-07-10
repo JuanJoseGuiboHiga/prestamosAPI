@@ -33,7 +33,13 @@ public class ArbolDecisionController {
 		 } catch (Exception e) {		
 			e.printStackTrace();
 		}
-		
+		 if(respuesta.contains("malo"))
+		 {
+			 respuesta = "Mal Pagador";
+		 }else
+		 {
+			 respuesta = "Buen Pagador";
+		 }
 		 return respuesta;
 	}
 	
