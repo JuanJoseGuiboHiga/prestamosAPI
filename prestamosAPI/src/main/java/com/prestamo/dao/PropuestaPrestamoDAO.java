@@ -47,7 +47,7 @@ public class PropuestaPrestamoDAO implements PropuestaPrestamoDAOInterface{
 	public List<PropuestaPrestamo> listarPropuestaPrestamo() {
 		 DBConnection conexion = DBConnection.getInstance();
 		 JdbcTemplate jdbcTemplate = conexion.getJdbcTemplate();
-	     List<PropuestaPrestamo> propuestaPrestamo = jdbcTemplate.query("select * from PropuestaPrestamo where estado ='Creada' AND  where estado ='Aprobado'", new PropuestaPrestamoRowMapper());
+	     List<PropuestaPrestamo> propuestaPrestamo = jdbcTemplate.query("select * from PropuestaPrestamo where estado ='Creada' OR estado ='Aprobado'", new PropuestaPrestamoRowMapper());
 	     return propuestaPrestamo;
 	}
 

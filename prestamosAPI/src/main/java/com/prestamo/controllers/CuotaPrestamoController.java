@@ -25,21 +25,15 @@ public class CuotaPrestamoController {
 		CuotaPrestamoDAO cuotaPrestamo =(CuotaPrestamoDAO) context.getBean("cuotaDAO");
 		context.getBean("conexion");
 		double tea = 0.13;
-		System.out.println(1+tea);
-		System.out.println(1.0/12.0);
 		double tem = (double) Math.pow(1+tea,1.0/12.0)-1;
-		double item = (double) Math.pow(1+tem,12.0);
-		System.out.println(tem);
-		System.out.println(1+tem);
-		System.out.println(item);
-		double cuota = (tem*item)/((item)-1);
+		double item = (double) Math.pow(1+tem,Double.parseDouble(plazo));
+		double cuota = monto*(tem*item)/((item)-1);
 		CuotaPrestamo entidad = new CuotaPrestamo();
 		entidad.setIdCliente(idCliente);
 		entidad.setIdPrestamo(idPrestamo);
-		entidad.setMonto(0);
-		cuotaPrestamo.registrarCuota(entidad, Integer.parseInt(plazo),132.14);
+		entidad.setMonto(cuota);
+		cuotaPrestamo.registrarCuota(entidad, Integer.parseInt(plazo),cuota);
         context.close();
-
         return cuota;
       
   }

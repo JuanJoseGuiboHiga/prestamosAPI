@@ -22,7 +22,7 @@ public class PrestamoController {
   }
 	
 	@RequestMapping(path = "/registrarPrestamo/{idPropuesta}/{idCliente}/{monto}/{motivo}", method = RequestMethod.GET)
-	public @ResponseBody void registrarPrestamo(@PathVariable int idPropuesta,@PathVariable int idCliente,
+	public @ResponseBody Prestamo registrarPrestamo(@PathVariable int idPropuesta,@PathVariable int idCliente,
 			@PathVariable double monto,@PathVariable String motivo) {
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		PrestamoDAO prestamoDAO =(PrestamoDAO) context.getBean("prestamoDAO");
@@ -33,7 +33,9 @@ public class PrestamoController {
 		prestamo.setMonto(monto);
 		prestamo.setMotivo(motivo);
 		prestamo.setEstado("Creado");
-		prestamoDAO.registrarPrestamo(prestamo);
+		int id = prestamoDAO.registrarPrestamo(prestamo);
+		prestamo.setIdPrestamo(id);
         context.close();
+        return prestamo;
   }
 }
