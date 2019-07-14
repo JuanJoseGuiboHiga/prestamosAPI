@@ -13,7 +13,6 @@ public class SolicitudPrestamoRowMapper  implements RowMapper<SolicitudPrestamo>
 	@Override
 	public SolicitudPrestamo mapRow(ResultSet rs, int rowNum) throws SQLException {
         SolicitudPrestamo solicitud = new SolicitudPrestamo();
-        System.out.println(rs.getString("Motivo"));
         solicitud.setIdSolicitud(rs.getString("IdSolicitud"));
         solicitud.setIdSolicitante(rs.getInt("IdSolicitante"));
         solicitud.setMotivo(rs.getString("Motivo"));

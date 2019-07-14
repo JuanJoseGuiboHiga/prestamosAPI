@@ -69,7 +69,18 @@ public class SolicitudPrestamoController {
         return solicitud;
   }
 	
-	@RequestMapping(path = "/testestado/{idSolicitud}/{estado}", method = RequestMethod.GET)
+	@RequestMapping(path = "/devolverSolicitud/{idSolicitud}",
+			method = RequestMethod.GET)
+	public @ResponseBody SolicitudPrestamo buscarSolicitud(@PathVariable int idSolicitud) {
+		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		SolicitudPrestamoDAO solicitudDAO =(SolicitudPrestamoDAO) context.getBean("solicitudPrestamoDAO");
+		context.getBean("conexion");
+		SolicitudPrestamo solicitud = solicitudDAO.buscarSolicitudPorId(idSolicitud);
+        context.close();
+        return solicitud;
+  }
+	
+	@RequestMapping(path = "/actualizarEstadoSolicitud/{idSolicitud}/{estado}", method = RequestMethod.GET)
 	public @ResponseBody void actualizarEstadoSolicitud(@PathVariable String idSolicitud,@PathVariable String estado) {
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		context.getBean("conexion");

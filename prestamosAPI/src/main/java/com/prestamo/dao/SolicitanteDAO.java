@@ -57,4 +57,13 @@ public class SolicitanteDAO implements SolicitanteDAOInterface{
 	     return solicitante;
 	}
 
+	@Override
+	public Solicitante devolverNombreSolicitante(int idSolicitante) {
+		 DBConnection conexion = DBConnection.getInstance();
+		 JdbcTemplate jdbcTemplate = conexion.getJdbcTemplate();
+		 String query = "select Nombre from Solicitante where IdSolicitante='"+idSolicitante+"';";
+		 Solicitante solicitante = jdbcTemplate.queryForObject(query, new SolicitanteRowMapper());
+	     return solicitante;
+	}
+
 }

@@ -8,5 +8,6 @@ import com.prestamo.entities.Solicitante;
 public interface PropuestaPrestamoDAOInterface {
     public void registrarPropuestaPrestamo(PropuestaPrestamo propuesta);
     public  List<PropuestaPrestamo> listarPropuestaPrestamo();
+    public  List<PropuestaPrestamo> listarPropuestaPrestamoAprobada();
     public void actualizarPropuestaPrestamo(int idPropuesta , String estado);
 }

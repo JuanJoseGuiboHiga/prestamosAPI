@@ -16,14 +16,21 @@ import com.prestamo.entities.SolicitudPrestamo;
 import com.prestamo.interfaces.SolicitudPrestamoDAOInterface;
 import com.prestamo.rowmapper.SolicitanteRowMapper;
 import com.prestamo.rowmapper.SolicitudPrestamoRowMapper;
+import com.prestamo.rowmapper.SolicitudPrestamoRowMapper2;
 import com.prestamo.connection.DBConnection;
 public class SolicitudPrestamoDAO implements SolicitudPrestamoDAOInterface{
 	@Override
 	public List<SolicitudPrestamo> listarSolicitudesPrestamo() {
 		 DBConnection conexion = DBConnection.getInstance();
 		 JdbcTemplate jdbcTemplate = conexion.getJdbcTemplate();
-	     List<SolicitudPrestamo> solicitudes = jdbcTemplate.query("select * from SolicitudPrestamo where estado ='En Proceso' ", new SolicitudPrestamoRowMapper());
-	     System.out.println(solicitudes.get(0).getEstado().toString());
+	     List<SolicitudPrestamo> solicitudes = jdbcTemplate.query("select SolicitudPrestamo.IdSolicitud,SolicitudPrestamo.IdSolicitante, Solicitante.Nombre,SolicitudPrestamo.Motivo,SolicitudPrestamo.Monto,\r\n" + 
+	     		"SolicitudPrestamo.Plazo,SolicitudPrestamo.Activo,SolicitudPrestamo.Pasivo,\r\n" + 
+	     		"SolicitudPrestamo.Patrimonio,SolicitudPrestamo.Costo,SolicitudPrestamo.VentaTotal,\r\n" + 
+	     		"SolicitudPrestamo.GastosAdministrativos,SolicitudPrestamo.GastosVentas,\r\n" + 
+	     		"SolicitudPrestamo.MargenUtilidad,SolicitudPrestamo.PDF,SolicitudPrestamo.Estado from SolicitudPrestamo inner join Solicitante \r\n" + 
+	     		"on SolicitudPrestamo.IdSolicitante =Solicitante.IdSolicitante\r\n" + 
+	     		"where SolicitudPrestamo.estado ='En Proceso'", new SolicitudPrestamoRowMapper2());
+	     System.out.println(solicitudes.get(0).getNombre().toString());
 	     return solicitudes;
 	}
 	
@@ -75,6 +82,16 @@ public class SolicitudPrestamoDAO implements SolicitudPrestamoDAOInterface{
 		 		"INNER JOIN PropuestaPrestamo\r\n" + 
 		 		"ON SolicitudPrestamo.IdSolicitud = PropuestaPrestamo.IdSolicitud\r\n" + 
 		 		"where IdPropuesta ="+idPropuesta+";";
+		 SolicitudPrestamo solicitud = jdbcTemplate.queryForObject(query, new SolicitudPrestamoRowMapper());
+	     return solicitud;
+	}
+
+
+	@Override
+	public SolicitudPrestamo buscarSolicitudPorId(int idSolicitud) {
+		 DBConnection conexion = DBConnection.getInstance();
+		 JdbcTemplate jdbcTemplate = conexion.getJdbcTemplate();
+		 String query = "select*from SolicitudPrestamo where idSolicitud="+idSolicitud+";";
 		 SolicitudPrestamo solicitud = jdbcTemplate.queryForObject(query, new SolicitudPrestamoRowMapper());
 	     return solicitud;
 	}

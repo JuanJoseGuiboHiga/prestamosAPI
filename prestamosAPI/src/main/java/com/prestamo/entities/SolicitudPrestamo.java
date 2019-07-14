@@ -5,6 +5,7 @@ package com.prestamo.entities;
 	  private String idSolicitud;
 	  private int idSolicitante;
 	  private String motivo;
+	  private String nombre;
 	  private double monto;
 	  private String plazo;
 	  private String estado;
@@ -146,6 +147,14 @@ package com.prestamo.entities;
 
 		public void setPlazo(String plazo) {
 			this.plazo = plazo;
+		}
+
+		public String getNombre() {
+			return nombre;
+		}
+
+		public void setNombre(String nombre) {
+			this.nombre = nombre;
 		}
 		
 		

@@ -47,7 +47,15 @@ public class PropuestaPrestamoDAO implements PropuestaPrestamoDAOInterface{
 	public List<PropuestaPrestamo> listarPropuestaPrestamo() {
 		 DBConnection conexion = DBConnection.getInstance();
 		 JdbcTemplate jdbcTemplate = conexion.getJdbcTemplate();
-	     List<PropuestaPrestamo> propuestaPrestamo = jdbcTemplate.query("select * from PropuestaPrestamo where estado ='Creada' OR estado ='Aprobado'", new PropuestaPrestamoRowMapper());
+	     List<PropuestaPrestamo> propuestaPrestamo = jdbcTemplate.query("select * from PropuestaPrestamo where estado ='Creada'", new PropuestaPrestamoRowMapper());
+	     return propuestaPrestamo;
+	}
+	
+	@Override
+	public List<PropuestaPrestamo> listarPropuestaPrestamoAprobada() {
+		 DBConnection conexion = DBConnection.getInstance();
+		 JdbcTemplate jdbcTemplate = conexion.getJdbcTemplate();
+	     List<PropuestaPrestamo> propuestaPrestamo = jdbcTemplate.query("select * from PropuestaPrestamo where Estado ='Aprobado,'", new PropuestaPrestamoRowMapper());
 	     return propuestaPrestamo;
 	}
 
@@ -55,6 +63,7 @@ public class PropuestaPrestamoDAO implements PropuestaPrestamoDAOInterface{
 	public void actualizarPropuestaPrestamo(int idPropuesta, String estado) {
 		 DBConnection conexion = DBConnection.getInstance();
 		 JdbcTemplate jdbcTemplate = conexion.getJdbcTemplate();
+		 System.out.println(estado);
 		 jdbcTemplate.update("update PropuestaPrestamo set Estado = ? where IdPropuesta = ?",estado ,idPropuesta);
 	}
 
