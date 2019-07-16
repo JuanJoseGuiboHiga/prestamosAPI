@@ -82,7 +82,7 @@ public class PropuestaPrestamoController {
 			  case "CreditoVehicular":
 				if(monto>=5000  && monto<=50000)
 				{
-					tasaInteres ="18";
+					tasaInteres ="15";
 				}
 				break;
 			  case "CompraLocal":

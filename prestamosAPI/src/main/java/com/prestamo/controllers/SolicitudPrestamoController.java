@@ -1,5 +1,8 @@
 package com.prestamo.controllers;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 
 import org.springframework.context.ConfigurableApplicationContext;
@@ -39,6 +42,13 @@ public class SolicitudPrestamoController {
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		SolicitudPrestamoDAO solicitudDAO =(SolicitudPrestamoDAO) context.getBean("solicitudPrestamoDAO");
 		context.getBean("conexion");
+		String pdfRuta = null;
+		try {
+			pdfRuta = URLDecoder.decode(pdf,"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		SolicitudPrestamo solicitud = new SolicitudPrestamo();
 		solicitud.setIdSolicitante(idSolicitante);
 		solicitud.setMotivo(motivo);
@@ -53,7 +63,7 @@ public class SolicitudPrestamoController {
 		solicitud.setGastosAdministrativos(gastosAdm);
 		solicitud.setGastosVentas(gastosVent);
 		solicitud.setMargenUtilidad(margenUti);
-		solicitud.setPdf(pdf);
+		solicitud.setPdf(pdfRuta);
         solicitudDAO.registrarSolicitudPrestamo(solicitud);
         context.close();
   }
